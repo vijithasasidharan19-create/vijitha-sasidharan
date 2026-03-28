@@ -67,17 +67,7 @@ a, button, .tag, .proj-card, .exp-card-head, .theme-btn, .dl-btn { cursor: none;
   transform: translate(-50%, -50%);
   transition: width .15s, height .15s, background .2s;
 }
-#cursor-label {
-  position: fixed;
-  font-family: 'Fira Code', monospace;
-  font-size: 10px; font-weight: 500;
-  color: var(--bg); background: var(--accent);
-  padding: 3px 9px; border-radius: 4px;
-  pointer-events: none; z-index: 9998;
-  opacity: 0; transform: translate(14px, -50%);
-  white-space: nowrap; letter-spacing: .06em;
-  transition: opacity .2s;
-}
+
 body.cursor-hover #cursor-ring { width: 56px; height: 56px; background: rgba(0,240,200,.08); border-color: var(--accent); }
 body.cursor-click #cursor-dot  { width: 10px; height: 10px; }
 body.cursor-link  #cursor-ring { width: 48px; height: 48px; border-color: var(--accent2); background: rgba(10,143,255,.10); }
@@ -171,7 +161,7 @@ body::before {
 .exp-role { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: -.01em; color: var(--text); }
 .exp-type { font-size: 12px; color: var(--text2); margin-top: 3px; }
 .exp-company { font-size: 12px; font-weight: 500; color: var(--accent2); margin-top: 10px; display: flex; align-items: center; gap: 6px; }
-.exp-company::before { content: ''; }
+.exp-company::before { content: '//'; color: var(--text3); }
 .exp-badge { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; background: var(--accent); color: var(--bg); padding: 2px 9px; border-radius: 3px; }
 .exp-body { padding: 0 32px 28px; display: none; }
 .exp-card.open .exp-body { display: block; }
@@ -230,7 +220,6 @@ body::before {
 <body>
 <div id="cursor-ring"></div>
 <div id="cursor-dot"></div>
-<div id="cursor-label"></div>
 
 <header class="topbar">
   <div class="topbar-logo">VS<span>.</span></div>
@@ -241,7 +230,7 @@ body::before {
     <a href="#education">Education</a>
   </nav>
   <div style="display:flex;align-items:center;gap:10px;">
-    <a href="Vijitha_Sasidharan_Resume.pdf" class="dl-btn" target="_blank">
+<a href="Vijitha_Sasidharan_Resume.pdf" class="dl-btn" target="_blank" download>
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Download Resume
     </a>
@@ -272,12 +261,12 @@ body::before {
       </p>
       <div class="hero-meta">
         <div class="hero-meta-item"><span class="dot"></span>Chennai, India</div>
-        <div class="hero-meta-item"><span class="dot"></span><a href="/cdn-cgi/l/email-protection#3f495655564b575e4c5e4c565b575e4d5e510e067f58525e5653115c5052"><span class="__cf_email__" data-cfemail="f98f9093908d91988a988a909d91988b9897c8c0b99e94989095d79a9694">[email&#160;protected]</span></a></div>
+        <div class="hero-meta-item"><span class="dot"></span><a href="mailto:vijithasasidharan19@gmail.com">vijithasasidharan19@gmail.com</a></div>
         <div class="hero-meta-item"><span class="dot"></span>+91 6374540906</div>
         <div class="hero-meta-item"><span class="dot"></span><a href="https://www.linkedin.com/in/vijitha-sasidharan-191679216/" target="_blank">LinkedIn</a></div>
       </div>
       <div style="margin-top:32px;">
-        <a href="Vijitha_Sasidharan_Resume.pdf" class="dl-btn" style="font-size:13px;padding:10px 24px;" target="_blank">
+<a href="Vijitha_Sasidharan_Resume.pdf" class="dl-btn" target="_blank" download>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download Resume (PDF)
         </a>
@@ -503,7 +492,7 @@ body::before {
     <div>
       <div class="footer-left">VS<span>.</span></div>
       <div class="footer-links">
-        <a href="/cdn-cgi/l/email-protection#0f796665667b676e7c6e7c666b676e7d6e613e364f68626e6663216c6062">Email</a>
+        <a href="mailto:vijithasasidharan19@gmail.com">Email</a>
         <a href="https://www.linkedin.com/in/vijitha-sasidharan-191679216/" target="_blank">LinkedIn</a>
         <a href="#about">Back to Top ↑</a>
       </div>
@@ -513,17 +502,15 @@ body::before {
 
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // ── Cursor ──
 const ring = document.getElementById('cursor-ring');
 const dot  = document.getElementById('cursor-dot');
-const clabel = document.getElementById('cursor-label');
 let mx = -200, my = -200, rx = -200, ry = -200;
 
 document.addEventListener('mousemove', e => {
   mx = e.clientX; my = e.clientY;
   dot.style.left = mx + 'px'; dot.style.top = my + 'px';
-  clabel.style.left = mx + 'px'; clabel.style.top = my + 'px';
 });
 (function loop() {
   rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
@@ -536,12 +523,9 @@ document.querySelectorAll('a, button, .tag, .proj-card, .exp-card-head, .skill-r
   el.addEventListener('mouseenter', () => {
     const isLink = el.tagName === 'A' || el.classList.contains('dl-btn');
     document.body.classList.add(isLink ? 'cursor-link' : 'cursor-hover');
-    const lbl = el.classList.contains('tag') ? 'skill' : el.classList.contains('proj-card') ? 'project' : el.tagName === 'A' ? 'visit' : '';
-    if (lbl) { clabel.textContent = lbl; clabel.style.opacity = '1'; }
   });
   el.addEventListener('mouseleave', () => {
     document.body.classList.remove('cursor-hover', 'cursor-link');
-    clabel.style.opacity = '0';
   });
 });
 document.addEventListener('mouseleave', () => { ring.style.opacity='0'; dot.style.opacity='0'; });
@@ -577,4 +561,13 @@ function toggleExp(idx) {
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
-  })
+  });
+}, { threshold: 0.06 });
+document.querySelectorAll('.sec, .proj-card, .skill-row, .edu-card, .cert-card, .exp-card').forEach(el => {
+  el.style.opacity = '0'; el.style.transform = 'translateY(22px)';
+  el.style.transition = 'opacity .5s ease, transform .5s ease';
+  obs.observe(el);
+});
+</script>
+</body>
+</html>
