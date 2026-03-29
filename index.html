@@ -19,6 +19,8 @@
   --wa-color:#25d366;--wa-glow:rgba(37,211,102,.22);
   --em-color:#0a8fff;--em-glow:rgba(10,143,255,.22);
   --bar-bg:rgba(0,240,200,.10);
+  --monitor-body:#0d1520;--monitor-bezel:#1a2535;--monitor-screen:#050e18;
+  --monitor-glow:rgba(0,240,200,.35);--monitor-scan:rgba(0,240,200,.04);
 }
 [data-theme="light"] {
   --bg:#f0f4f8;--bg2:#e8edf5;--bg3:#dde4ee;--surface:#ffffff;--surface2:#f5f8fc;
@@ -32,6 +34,8 @@
   --wa-color:#1aad52;--wa-glow:rgba(26,173,82,.18);
   --em-color:#0a72e8;--em-glow:rgba(10,114,232,.18);
   --bar-bg:rgba(10,114,232,.10);
+  --monitor-body:#dde4ee;--monitor-bezel:#c8d4e4;--monitor-screen:#1a2535;
+  --monitor-glow:rgba(10,114,232,.4);--monitor-scan:rgba(10,114,232,.05);
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -88,7 +92,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;}
 
 /* PROFILE PHOTO */
-.hero-right{display:flex;flex-direction:column;align-items:center;gap:20px;flex-shrink:0;}
+.hero-right{display:flex;flex-direction:column;align-items:center;gap:28px;flex-shrink:0;}
 .profile-photo-wrap{position:relative;width:180px;height:180px;flex-shrink:0;}
 .profile-photo-wrap::before{content:'';position:absolute;inset:-4px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));z-index:0;animation:spinGlow 6s linear infinite;}
 .profile-photo-wrap::after{content:'';position:absolute;inset:2px;border-radius:50%;background:var(--bg);z-index:1;}
@@ -98,11 +102,204 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .profile-photo-img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 @keyframes spinGlow{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
 
-/* STAT CARDS */
-.hero-stats{display:flex;flex-direction:column;gap:12px;}
-.hero-stat-card{text-align:center;border:1px solid var(--border2);border-radius:12px;padding:18px 28px 18px 28px;background:var(--surface);box-shadow:0 0 30px var(--glow);padding-right:40px;}
-.hero-stat-num{font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:var(--accent);line-height:1;display:block;}
-.hero-stat-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text2);margin-top:4px;display:block;}
+/* ═══ MONITOR WIDGET ═══ */
+.monitor-wrap{display:flex;flex-direction:column;align-items:center;}
+
+.monitor{
+  position:relative;
+  width:200px;
+}
+
+/* Screen outer bezel */
+.monitor-screen-bezel{
+  background:var(--monitor-bezel);
+  border-radius:10px 10px 4px 4px;
+  padding:8px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.06),
+    0 8px 32px rgba(0,0,0,.5),
+    0 0 60px var(--monitor-glow);
+  position:relative;
+}
+
+/* Power LED */
+.monitor-screen-bezel::before{
+  content:'';
+  position:absolute;
+  bottom:12px;
+  left:50%;
+  transform:translateX(-50%);
+  width:5px;height:5px;
+  border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 8px var(--accent),0 0 16px var(--accent);
+  animation:ledPulse 2s ease-in-out infinite;
+  z-index:5;
+}
+@keyframes ledPulse{0%,100%{opacity:1;box-shadow:0 0 6px var(--accent),0 0 12px var(--accent);}50%{opacity:.4;box-shadow:0 0 3px var(--accent);}}
+
+/* The actual screen */
+.monitor-screen{
+  background:var(--monitor-screen);
+  border-radius:6px;
+  width:184px;
+  height:130px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  border:1px solid rgba(0,240,200,.12);
+}
+
+/* CRT scanline overlay */
+.monitor-screen::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    var(--monitor-scan) 2px,
+    var(--monitor-scan) 4px
+  );
+  pointer-events:none;
+  z-index:3;
+}
+
+/* Screen glow / phosphor vignette */
+.monitor-screen::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse at 50% 40%,rgba(0,240,200,.10) 0%,transparent 70%);
+  pointer-events:none;
+  z-index:2;
+}
+
+/* Blinking cursor line top */
+.monitor-topbar{
+  position:absolute;
+  top:10px;left:12px;right:12px;
+  display:flex;align-items:center;gap:5px;
+  z-index:4;
+}
+.monitor-dot{width:5px;height:5px;border-radius:50%;}
+.monitor-dot.r{background:#ff5f57;}
+.monitor-dot.y{background:#febc2e;}
+.monitor-dot.g{background:#28c840;}
+
+/* Typing prompt */
+.monitor-prompt{
+  position:absolute;
+  top:30px;left:12px;
+  font-family:'Fira Code',monospace;
+  font-size:8px;
+  color:rgba(0,240,200,.45);
+  letter-spacing:.06em;
+  z-index:4;
+}
+.monitor-prompt-cursor{
+  display:inline-block;
+  width:5px;height:9px;
+  background:rgba(0,240,200,.6);
+  vertical-align:middle;
+  animation:blink .75s step-end infinite;
+  margin-left:1px;
+}
+
+/* Big number display */
+.monitor-num{
+  font-family:'Syne',sans-serif;
+  font-size:52px;
+  font-weight:800;
+  color:var(--accent);
+  line-height:1;
+  position:relative;
+  z-index:4;
+  text-shadow:0 0 20px var(--accent),0 0 40px rgba(0,240,200,.4);
+  letter-spacing:-.04em;
+}
+
+.monitor-unit{
+  font-family:'Fira Code',monospace;
+  font-size:9px;
+  font-weight:500;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--accent);
+  opacity:.7;
+  z-index:4;
+  position:relative;
+}
+
+.monitor-label{
+  font-family:'Fira Code',monospace;
+  font-size:7.5px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:rgba(0,240,200,.4);
+  z-index:4;
+  position:relative;
+  margin-top:2px;
+}
+
+/* Neck */
+.monitor-neck{
+  width:28px;
+  height:18px;
+  background:var(--monitor-bezel);
+  margin:0 auto;
+  clip-path:polygon(20% 0%,80% 0%,100% 100%,0% 100%);
+  box-shadow:inset 0 -2px 4px rgba(0,0,0,.3);
+}
+
+/* Base / stand */
+.monitor-base{
+  width:100px;
+  height:10px;
+  background:var(--monitor-bezel);
+  border-radius:0 0 8px 8px;
+  margin:0 auto;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+  position:relative;
+}
+.monitor-base::before{
+  content:'';
+  position:absolute;
+  top:0;left:10px;right:10px;height:2px;
+  background:rgba(255,255,255,.06);
+  border-radius:2px;
+}
+
+/* Animated scan line sweep */
+@keyframes scanSwipe{
+  0%{top:-100%;}
+  100%{top:200%;}
+}
+.monitor-scanline{
+  position:absolute;
+  left:0;right:0;
+  height:30px;
+  background:linear-gradient(transparent,rgba(0,240,200,.06),transparent);
+  animation:scanSwipe 3.5s ease-in-out infinite;
+  z-index:4;
+  pointer-events:none;
+}
+
+/* Glitch flicker */
+@keyframes glitchFlicker{
+  0%,97%,100%{opacity:1;transform:none;}
+  97.5%{opacity:.6;transform:translateX(1px);}
+  98%{opacity:.8;transform:translateX(-1px);}
+  98.5%{opacity:1;transform:none;}
+}
+.monitor-screen{animation:glitchFlicker 8s ease infinite;}
+
+/* ═══ END MONITOR ═══ */
 
 /* SECTIONS */
 .sec{padding:100px 0 0;}
@@ -111,7 +308,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .sec-title{font-family:'Syne',sans-serif;font-size:clamp(22px,3vw,30px);font-weight:700;letter-spacing:-.02em;color:var(--text);}
 .sec-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent);}
 
-/* SKILLS - proficiency bars */
+/* SKILLS */
 .skills-wrap{display:flex;flex-direction:column;}
 .skill-row{display:grid;grid-template-columns:210px 1fr;gap:24px;align-items:start;padding:20px 0;border-bottom:1px solid var(--border);}
 .skill-row:last-child{border-bottom:none;}
@@ -119,8 +316,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .tag-wrap{display:flex;flex-wrap:wrap;gap:8px;}
 .tag{font-size:11.5px;background:var(--tag-bg);border:1px solid var(--tag-border);color:var(--tag-text);padding:4px 13px;border-radius:4px;font-family:'Fira Code',monospace;transition:all .2s;cursor:default;}
 .tag:hover{background:var(--accent);color:var(--bg);border-color:var(--accent);transform:translateY(-2px);}
-
-/* Proficiency bars section */
 .prof-bars{display:flex;flex-direction:column;gap:14px;width:100%;}
 .prof-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
 .prof-name{font-size:12px;color:var(--text);}
@@ -193,7 +388,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .connect-btn-em{background:transparent;color:var(--em-color);border:1.5px solid var(--em-color);box-shadow:0 4px 24px var(--em-glow);}
 .connect-btn-em:hover{background:var(--em-color);color:#fff;box-shadow:0 8px 32px var(--em-glow);}
 
-/* MODALS - contact */
+/* MODALS */
 .modal-overlay{position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,.6);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s ease;padding:20px;}
 .modal-overlay.active{opacity:1;pointer-events:all;}
 .modal{background:var(--modal-bg);border:1px solid var(--border2);border-radius:18px;padding:44px 44px 36px;width:100%;max-width:480px;position:relative;transform:translateY(30px) scale(.97);transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0;box-shadow:0 30px 80px rgba(0,0,0,.5);}
@@ -267,13 +462,15 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   .wrapper{padding:0 20px 60px;}
   .hero{flex-direction:column;min-height:auto;padding:100px 0 50px;gap:40px;}
   .hero-right{flex-direction:row;flex-wrap:wrap;justify-content:center;}
-  .hero-stats{flex-direction:row;}
   .profile-photo-wrap{width:140px;height:140px;}
   .skill-row{grid-template-columns:1fr;gap:10px;}
   .edu-grid{grid-template-columns:1fr;}
   .footer{flex-direction:column;align-items:flex-start;}
   .connect-inner{padding:44px 24px;}
   .modal,.proj-modal{padding:32px 24px 28px;}
+  .monitor{width:160px;}
+  .monitor-screen{width:144px;height:106px;}
+  .monitor-num{font-size:40px;}
 }
 </style>
 </head>
@@ -418,16 +615,47 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       </div>
     </div>
 
-    <!-- Profile photo + stat cards -->
+    <!-- Profile photo + Monitor widget -->
     <div class="hero-right">
-      
-      <div class="hero-stats">
-        <div class="hero-stat-card">
-          <span class="hero-stat-num" data-target="3">0</span>
-          <span class="hero-stat-label">Years Experience</span>
+
+      <!-- Profile photo -->
+      <div class="profile-photo-wrap">
+        <div class="profile-photo-inner">
+          <span class="profile-initials">VS</span>
+          <span class="profile-photo-label">Portfolio</span>
         </div>
-       
       </div>
+
+      <!-- ══ Monitor Experience Widget ══ -->
+      <div class="monitor-wrap">
+        <div class="monitor">
+          <!-- Screen -->
+          <div class="monitor-screen-bezel">
+            <div class="monitor-screen">
+              <!-- Scanline sweep -->
+              <div class="monitor-scanline"></div>
+              <!-- macOS-style traffic lights -->
+              <div class="monitor-topbar">
+                <span class="monitor-dot r"></span>
+                <span class="monitor-dot y"></span>
+                <span class="monitor-dot g"></span>
+              </div>
+              <!-- Prompt line -->
+              <div class="monitor-prompt">$ ./experience.sh<span class="monitor-prompt-cursor"></span></div>
+              <!-- Big number -->
+              <span class="monitor-num" id="monitorNum">0</span>
+              <span class="monitor-unit">+ Years</span>
+              <span class="monitor-label">Experience</span>
+            </div>
+          </div>
+          <!-- Neck -->
+          <div class="monitor-neck"></div>
+          <!-- Base -->
+          <div class="monitor-base"></div>
+        </div>
+      </div>
+      <!-- ══ End Monitor ══ -->
+
     </div>
   </section>
 
@@ -439,7 +667,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="sec-line"></div>
     </div>
     <div class="skills-wrap">
-      <!-- Tags rows -->
       <div class="skill-row">
         <div class="skill-cat">Programming &amp; Backend</div>
         <div class="tag-wrap">
@@ -476,7 +703,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
           <span class="tag">Spring Security</span><span class="tag">RBAC</span><span class="tag">JWT</span><span class="tag">Authentication</span><span class="tag">Authorization</span><span class="tag">Secure APIs</span>
         </div>
       </div>
-      <!-- Proficiency bars -->
       <div class="skill-row">
         <div class="skill-cat">Proficiency</div>
         <div class="prof-bars" id="profBars">
@@ -741,8 +967,8 @@ function toggleExp(idx){
   if(!isOpen){card.classList.add('open');card.querySelector('.exp-toggle').textContent='−';}
 }
 
-// ── Scroll animations + proficiency bars + counters ──
-let barsAnimated=false,countersAnimated=false;
+// ── Scroll animations + proficiency bars + monitor counter ──
+let barsAnimated=false,monitorAnimated=false;
 const obs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
     if(e.isIntersecting){
@@ -754,25 +980,27 @@ const obs=new IntersectionObserver(entries=>{
           setTimeout(()=>{bar.style.width=bar.dataset.width+'%';},200);
         });
       }
-      // counters
-      if(!countersAnimated&&e.target.closest('#about')){
-        countersAnimated=true;
-        document.querySelectorAll('.hero-stat-num[data-target]').forEach(el=>{
-          const target=+el.dataset.target,suffix=el.dataset.suffix||'',dur=1400,step=16;
-          let current=0,steps=Math.ceil(dur/step);
-          const inc=target/steps;
-          const t=setInterval(()=>{current=Math.min(current+inc,target);el.textContent=Math.floor(current)+suffix;if(current>=target)clearInterval(t);},step);
-        });
+      // monitor counter
+      if(!monitorAnimated&&(e.target.classList.contains('monitor-wrap')||e.target.closest('.monitor-wrap'))){
+        monitorAnimated=true;
+        const el=document.getElementById('monitorNum');
+        const target=3,dur=1600,step=16;
+        let current=0,steps=Math.ceil(dur/step),inc=target/steps;
+        const t=setInterval(()=>{
+          current=Math.min(current+inc,target);
+          el.textContent=Math.floor(current);
+          if(current>=target){el.textContent=target;clearInterval(t);}
+        },step);
       }
     }
   });
 },{threshold:0.06});
-document.querySelectorAll('.sec,.proj-card,.skill-row,.edu-card,.cert-card,.exp-card,.connect-inner,.hero-right').forEach(el=>{
+
+document.querySelectorAll('.sec,.proj-card,.skill-row,.edu-card,.cert-card,.exp-card,.connect-inner,.hero-right,.monitor-wrap').forEach(el=>{
   el.style.opacity='0';el.style.transform='translateY(22px)';
   el.style.transition='opacity .5s ease,transform .5s ease';
   obs.observe(el);
 });
-// hero content visible immediately
 document.querySelector('.hero-content').style.opacity='1';
 
 // ── Contact Modals ──
