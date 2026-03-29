@@ -73,7 +73,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .hero{min-height:88vh;display:flex;align-items:center;padding:110px 0 80px;position:relative;gap:60px;}
 .hero-glow{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,var(--glow) 0%,transparent 65%);top:50%;left:-180px;transform:translateY(-50%);pointer-events:none;}
 .hero-glow2{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,var(--glow2) 0%,transparent 65%);top:10%;right:-120px;pointer-events:none;}
-.hero-content{max-width:600px;position:relative;flex:1;}
+.hero-content{max-width:700px;position:relative;flex:1;}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border:1px solid var(--border2);border-radius:4px;padding:5px 14px;margin-bottom:28px;background:var(--tag-bg);animation:fadeUp .5s ease both;}
 .hero-badge::before{content:'▶';font-size:7px;}
 .hero h1{font-family:'Syne',sans-serif;font-size:clamp(40px,6vw,74px);font-weight:800;line-height:1.0;letter-spacing:-.03em;color:var(--text);margin-bottom:8px;animation:fadeUp .55s .08s ease both;}
@@ -100,7 +100,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
 /* STAT CARDS */
 .hero-stats{display:flex;flex-direction:column;gap:12px;}
-.hero-stat-card{text-align:center;border:1px solid var(--border2);border-radius:12px;padding:18px 28px;background:var(--surface);box-shadow:0 0 30px var(--glow);}
+.hero-stat-card{text-align:center;border:1px solid var(--border2);border-radius:12px;padding:18px 28px 18px 28px;background:var(--surface);box-shadow:0 0 30px var(--glow);padding-right:40px;}
 .hero-stat-num{font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:var(--accent);line-height:1;display:block;}
 .hero-stat-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text2);margin-top:4px;display:block;}
 
@@ -513,7 +513,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         </div>
         <div class="exp-body">
           <ul class="exp-points">
-            <li>Architected and developed 20+ secure RESTful APIs using Java Spring Boot, incorporating robust transaction handling, custom exception management, and full Swagger (OpenAPI 3.0) documentation.</li>
+            <li>Architected and developed 40+ secure RESTful APIs using Java Spring Boot, incorporating robust transaction handling, custom exception management, and full Swagger (OpenAPI 3.0) documentation.</li>
             <li>Engineered a high-volume FinTech payment gateway (CrorePay) supporting payouts, BBPS bill payments, and large-scale financial transactions with zero data loss and 99.9% uptime.</li>
             <li>Implemented Spring Security with Role-Based Access Control (RBAC) and JWT-based authentication, ensuring enterprise-level data security across all microservices.</li>
             <li>Designed and deployed scalable microservices for 6 distinct enterprise products including NFC-based attendance systems, hostel management, and subscription billing platforms.</li>
